@@ -87,29 +87,53 @@ class Scene0 {
     );
   }
 
+  // keyPressed() {
+  //   if (this.awaitingClick) return; // ignore until click
+  //   if ([LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW].includes(keyCode)) {
+  //     this.spawnPlayer();
+  //   }
+  // }
+  
+
   keyPressed() {
-    if (this.awaitingClick) return; // ignore until click
-    if ([LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW].includes(keyCode)) {
-      this.spawnPlayer();
+  // Start the intro with SPACE (or Enter) if we’re waiting
+  if (this.awaitingClick) {
+    if (key === ' ' || keyCode === 32 || keyCode === ENTER) {
+      this.startIntro();
     }
+    return;
   }
 
-  mousePressed() {
-    if (this.awaitingClick) {
-      let ctx = getAudioContext();
-      if (ctx.state !== "running") ctx.resume();
-
-      if (!this.musicStarted) {
-        playMusic(music.intro);
-        this.musicStarted = true;
-      }
-
-      this.awaitingClick = false;
-      return;
-    }
-
-    if (!this.player) this.spawnPlayer();
+  // Keep your existing arrow behavior
+  if ([LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW].includes(keyCode)) {
+    this.spawnPlayer();
   }
+}
+
+  // mousePressed() {
+  //   if (this.awaitingClick) {
+  //     let ctx = getAudioContext();
+  //     if (ctx.state !== "running") ctx.resume();
+
+  //     if (!this.musicStarted) {
+  //       playMusic(music.intro);
+  //       this.musicStarted = true;
+  //     }
+
+  //     this.awaitingClick = false;
+  //     return;
+  //   }
+
+  //   if (!this.player) this.spawnPlayer();
+  // }
+mousePressed() {
+  if (this.awaitingClick) {
+    this.startIntro();
+    return;
+  }
+
+  if (!this.player) this.spawnPlayer();
+}
 
   drawDoor() {
     push();
@@ -157,3 +181,16 @@ class Scene0 {
     this.musicStarted = false;
   }
 }
+
+startIntro() {
+  let ctx = getAudioContext();
+  if (ctx.state !== "running") ctx.resume();
+
+  if (!this.musicStarted) {
+    playMusic(music.intro);
+    this.musicStarted = true;
+  }
+
+  this.awaitingClick = false;
+}
+

@@ -112,13 +112,30 @@ function draw() {
 }
 
 function keyPressed() {
-  if (keyCode === SPACE) {
-    sceneManager.nextScene();
-    return false;
+  const s = sceneManager.scenes[sceneManager.currentScene];
+
+  // If we're on Scene 0 and it's waiting to start, SPACE should START, not NEXT
+  if (sceneManager.currentScene === 0 && s && s.awaitingClick) {
+    if (key === ' ' || keyCode === 32 || keyCode === ENTER) {
+      s.awaitingClick = false;
+
+      // (optional) also trigger your music start exactly like mousePressed does
+      let ctx = getAudioContext();
+      if (ctx.state !== "running") ctx.resume();
+      if (!s.musicStarted) {
+        playMusic(music.intro);
+        s.musicStarted = true;
+      }
+
+      return false; // IMPORTANT: stops other handlers / default behavior
+    }
   }
+
+  // otherwise normal behavior
   sceneManager.keyPressed();
   return false;
 }
+
 
 function mousePressed() {
   sceneManager.mousePressed();

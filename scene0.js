@@ -88,13 +88,26 @@ if (this.awaitingClick) return;
     );
   }
 
-  keyPressed() {
-    if (this.awaitingClick) return; // ignore until click
-    if ([LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW].includes(keyCode)) {
-      this.spawnPlayer();
+keyPressed() {
+  if (this.awaitingClick) {
+    if (key === ' ' || keyCode === 32 || keyCode === ENTER) {
+      let ctx = getAudioContext();
+      if (ctx.state !== "running") ctx.resume();
+
+      if (!this.musicStarted) {
+        playMusic(music.intro);
+        this.musicStarted = true;
+      }
+
+      this.awaitingClick = false;
     }
+    return;
   }
-  
+
+  if ([LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW].includes(keyCode)) {
+    this.spawnPlayer();
+  }
+}
 
  
 

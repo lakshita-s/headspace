@@ -29,22 +29,8 @@ class Scene0 {
   display() {
     background(0);
 
-if (this.awaitingClick) {
-  // Allow SPACE (or ENTER) to start instead of click (iframe-safe)
-  if (keyIsDown(32) || keyIsDown(ENTER)) {
-    let ctx = getAudioContext();
-    if (ctx.state !== "running") ctx.resume();
+if (this.awaitingClick) return;
 
-    if (!this.musicStarted) {
-      playMusic(music.intro);
-      this.musicStarted = true;
-    }
-
-    this.awaitingClick = false;
-  }
-
-  return;
-}
 
     if (!this.player) {
       if (this.textState === "fadeIn") {

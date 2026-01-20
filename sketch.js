@@ -84,12 +84,28 @@ function preload() {
 }
 
 
+// function setup() {
+//   createCanvas(600, 500);
+//   textFont(myFont);
+//   sceneManager = new SceneManager();
+//   sceneManager.setupCurrent();
+// }
+
+let cnv;
+
 function setup() {
-  createCanvas(600, 500);
+  cnv = createCanvas(600, 500);
   textFont(myFont);
+
+  // ✅ allow keyboard controls inside iframe
+  cnv.elt.setAttribute('tabindex', '0');
+  cnv.elt.style.outline = 'none';
+  cnv.elt.focus();
+
   sceneManager = new SceneManager();
   sceneManager.setupCurrent();
 }
+
 
 function draw() {
   sceneManager.display();
@@ -117,4 +133,12 @@ function playMusic(track) {
   if (track && !track.isPlaying()) {
     track.loop();
   }
+}
+
+function mousePressed() {
+  if (cnv) cnv.elt.focus();
+}
+
+function touchStarted() {
+  if (cnv) cnv.elt.focus();
 }
